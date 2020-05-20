@@ -184,3 +184,6 @@ org.jetbrains.kotlin.idea.refactoring.move.MoveTestGenerated.testKotlin_moveTopL
 org.jetbrains.kotlin.idea.intentions.IntentionTestGenerated.ConvertSealedClassToEnum.testInstancesOnly, Generated entries reordered,, FLAKY
 org.jetbrains.kotlin.idea.intentions.IntentionTestGenerated.ConvertSealedClassToEnum.testInstancesAndMembers, Enum reorder,, FLAKY
 org.jetbrains.kotlin.idea.quickfix.QuickFixTestGenerated.CreateFromUsage.CreateClass.DelegationSpecifier.testCreateSuperClassFromSuperTypeEntry3, Unprocessed,,
+org.jetbrains.kotlin.idea.caches.resolve.IdeLightClassTestGenerated.Facades.testSingleJvmClassName, Invalid behavior of old lightclasses in common tests,,
+org.jetbrains.kotlin.idea.caches.resolve.IdeLightClassTestGenerated.CompilationErrors.testActualTypeAliasCustomJvmPackageName, Invalid behavior of old lightclasses in common tests,,
+org.jetbrains.kotlin.idea.caches.resolve.IdeLightClassTestGenerated.CompilationErrors.testJvmPackageName, Invalid behavior of old lightclasses in common tests,,

@@ -56,3 +56,5 @@ org.jetbrains.kotlin.idea.debugger.test.KotlinSteppingTestGenerated.StepOver.tes
 org.jetbrains.kotlin.incremental.IncrementalJsKlibCompilerRunnerTestGenerated.ClassHierarchyAffected.testMethodRemoved, full fledged FO in klib required,,
 org.jetbrains.kotlin.idea.quickfix.QuickFixTestGenerated.ConvertToAnonymousObject.testHasConcreateMember2, Unprocessed,,
 org.jetbrains.kotlin.idea.quickfix.QuickFixMultiFileTestGenerated.MakePrivateAndOverrideMember.testSetter, Unprocessed,,
+org.jetbrains.kotlin.idea.caches.resolve.IdeLightClassTestGenerated.testAnnotatedPropertyWithSites, Unprocessed,,
+org.jetbrains.kotlin.asJava.classes.UltraLightClassSanityTestGenerated.testAnnotatedPropertyWithSites, Unprocessed,,
