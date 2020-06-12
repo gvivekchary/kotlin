@@ -16,35 +16,33 @@
 
 package org.jetbrains.kotlin.ir.expressions.impl
 
+import org.jetbrains.kotlin.ir.IrElementBase
 import org.jetbrains.kotlin.ir.declarations.IrDeclarationFactory
-import org.jetbrains.kotlin.ir.declarations.impl.IrBodyBase
 import org.jetbrains.kotlin.ir.declarations.impl.IrDeclarationFactoryImpl
 import org.jetbrains.kotlin.ir.expressions.IrExpression
 import org.jetbrains.kotlin.ir.expressions.IrExpressionBody
 import org.jetbrains.kotlin.ir.visitors.IrElementTransformer
 import org.jetbrains.kotlin.ir.visitors.IrElementVisitor
 
-class IrExpressionBodyImpl private constructor(
+class IrExpressionBodyImpl(
     startOffset: Int,
     endOffset: Int,
-    private var expressionField: IrExpression? = null,
     initializer: (IrExpressionBody.() -> Unit)? = null
 ) :
-    IrBodyBase<IrExpressionBodyImpl>(startOffset, endOffset, initializer),
+    IrElementBase(startOffset, endOffset),
     IrExpressionBody {
 
-    constructor(expression: IrExpression) : this(expression.startOffset, expression.endOffset, expression, null)
+    init {
+        initializer?.invoke(this)
+    }
 
-    constructor(startOffset: Int, endOffset: Int, expression: IrExpression) : this(startOffset, endOffset, expression, null)
+    constructor(startOffset: Int, endOffset: Int, expression: IrExpression) : this(startOffset, endOffset) {
+        this.expression = expression
+    }
 
-    constructor(startOffset: Int, endOffset: Int, initializer: IrExpressionBody.() -> Unit) :
-        this(startOffset, endOffset, null, initializer)
+    constructor(expression: IrExpression) : this(expression.startOffset, expression.endOffset, expression)
 
-    override var expression: IrExpression
-        get() = checkEnabled { expressionField!! }
-        set(e) {
-            checkEnabled { expressionField = e }
-        }
+    override lateinit var expression: IrExpression
 
     override val factory: IrDeclarationFactory
         get() = IrDeclarationFactoryImpl

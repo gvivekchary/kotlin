@@ -20,7 +20,6 @@ import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor
 import org.jetbrains.kotlin.ir.ObsoleteDescriptorBasedAPI
 import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
 import org.jetbrains.kotlin.ir.declarations.IrTypeParameter
-import org.jetbrains.kotlin.ir.declarations.impl.carriers.TypeParameterCarrier
 import org.jetbrains.kotlin.ir.symbols.IrTypeParameterSymbol
 import org.jetbrains.kotlin.ir.types.IrType
 import org.jetbrains.kotlin.ir.visitors.IrElementTransformer
@@ -39,9 +38,8 @@ class IrTypeParameterImpl(
     override val isReified: Boolean,
     override val variance: Variance
 ) :
-    IrDeclarationBase<TypeParameterCarrier>(startOffset, endOffset, origin),
-    IrTypeParameter,
-    TypeParameterCarrier {
+    IrDeclarationBase(startOffset, endOffset, origin),
+    IrTypeParameter {
 
     init {
         symbol.bind(this)

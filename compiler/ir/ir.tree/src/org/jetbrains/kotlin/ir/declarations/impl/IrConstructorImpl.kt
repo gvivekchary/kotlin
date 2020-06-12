@@ -21,7 +21,6 @@ import org.jetbrains.kotlin.descriptors.Visibility
 import org.jetbrains.kotlin.ir.ObsoleteDescriptorBasedAPI
 import org.jetbrains.kotlin.ir.declarations.IrConstructor
 import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
-import org.jetbrains.kotlin.ir.declarations.impl.carriers.ConstructorCarrier
 import org.jetbrains.kotlin.ir.symbols.IrConstructorSymbol
 import org.jetbrains.kotlin.ir.types.IrType
 import org.jetbrains.kotlin.ir.visitors.IrElementVisitor
@@ -40,14 +39,13 @@ class IrConstructorImpl(
     override val isPrimary: Boolean,
     isExpect: Boolean
 ) :
-    IrFunctionBase<ConstructorCarrier>(
+    IrFunctionBase(
         startOffset, endOffset, origin, name,
         visibility,
         isInline, isExternal, isExpect,
         returnType
     ),
-    IrConstructor,
-    ConstructorCarrier {
+    IrConstructor {
 
     init {
         symbol.bind(this)

@@ -22,7 +22,6 @@ import org.jetbrains.kotlin.ir.ObsoleteDescriptorBasedAPI
 import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
 import org.jetbrains.kotlin.ir.declarations.IrField
 import org.jetbrains.kotlin.ir.declarations.MetadataSource
-import org.jetbrains.kotlin.ir.declarations.impl.carriers.FieldCarrier
 import org.jetbrains.kotlin.ir.expressions.IrExpressionBody
 import org.jetbrains.kotlin.ir.symbols.IrFieldSymbol
 import org.jetbrains.kotlin.ir.symbols.IrPropertySymbol
@@ -41,10 +40,9 @@ class IrFieldImpl(
     override var visibility: Visibility,
     override val isFinal: Boolean,
     override val isExternal: Boolean,
-    override val isStatic: Boolean
-) : IrDeclarationBase<FieldCarrier>(startOffset, endOffset, origin),
-    IrField,
-    FieldCarrier {
+    override val isStatic: Boolean,
+) : IrDeclarationBase(startOffset, endOffset, origin),
+    IrField {
 
     init {
         symbol.bind(this)
@@ -53,38 +51,11 @@ class IrFieldImpl(
     @ObsoleteDescriptorBasedAPI
     override val descriptor: PropertyDescriptor = symbol.descriptor
 
-    override var initializerField: IrExpressionBody? = null
+    override var initializer: IrExpressionBody? = null
 
-    override var initializer: IrExpressionBody?
-        get() = getCarrier().initializerField
-        set(v) {
-            if (initializer !== v) {
-                if (v is IrBodyBase<*>) {
-                    v.container = this
-                }
-                setCarrier().initializerField = v
-            }
-        }
+    override var correspondingPropertySymbol: IrPropertySymbol? = null
 
-    override var correspondingPropertySymbolField: IrPropertySymbol? = null
-
-    override var correspondingPropertySymbol: IrPropertySymbol?
-        get() = getCarrier().correspondingPropertySymbolField
-        set(v) {
-            if (correspondingPropertySymbol !== v) {
-                setCarrier().correspondingPropertySymbolField = v
-            }
-        }
-
-    override var metadataField: MetadataSource? = null
-
-    override var metadata: MetadataSource?
-        get() = getCarrier().metadataField
-        set(v) {
-            if (metadata !== v) {
-                setCarrier().metadataField = v
-            }
-        }
+    override var metadata: MetadataSource? = null
 
     override fun <R, D> accept(visitor: IrElementVisitor<R, D>, data: D): R {
         return visitor.visitField(this, data)

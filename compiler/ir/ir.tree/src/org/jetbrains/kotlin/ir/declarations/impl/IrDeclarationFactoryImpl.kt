@@ -252,7 +252,7 @@ object IrDeclarationFactoryImpl : IrDeclarationFactory {
         startOffset: Int,
         endOffset: Int,
     ): IrBlockBody =
-        IrBlockBodyImpl(startOffset, endOffset, null)
+        IrBlockBodyImpl(startOffset, endOffset)
 
     override fun createBlockBody(
         startOffset: Int,
