@@ -27,4 +27,12 @@ public class TestMap<K, V> implements Map<K, V> {
 
 class MyMap: TestMap<String, String>()
 
+// The Kotlin version of getOrDefault, which redirects to the default implementation in java.util.Map
+// 1 public bridge getOrDefault\(Ljava/lang/String;Ljava/lang/String;\)Ljava/lang/String;
+
+// JVM_TEMPLATES:
 // 1 public final bridge getOrDefault\(Ljava/lang/Object;Ljava/lang/Object;\)Ljava/lang/Object;
+
+// JVM_IR_TEMPLATES:
+// 1 public final bridge getOrDefault\(Ljava/lang/Object;Ljava/lang/String;\)Ljava/lang/String;
+// 1 public synthetic bridge getOrDefault\(Ljava/lang/Object;Ljava/lang/Object;\)Ljava/lang/Object;
