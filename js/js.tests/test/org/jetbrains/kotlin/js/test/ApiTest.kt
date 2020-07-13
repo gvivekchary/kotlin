@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.descriptors.impl.EnumEntrySyntheticClassDescriptor
 import org.jetbrains.kotlin.ir.backend.js.MainModule
 import org.jetbrains.kotlin.ir.backend.js.jsResolveLibraries
 import org.jetbrains.kotlin.ir.backend.js.loadIr
+import org.jetbrains.kotlin.ir.declarations.impl.IrDeclarationFactoryImpl
 import org.jetbrains.kotlin.js.config.JSConfigurationKeys
 import org.jetbrains.kotlin.js.config.JsConfig
 import org.jetbrains.kotlin.jvm.compiler.ExpectedLoadErrorsUtil
@@ -83,7 +84,8 @@ class ApiTest : KotlinTestWithEnvironment() {
                 AnalyzerWithCompilerReport(configuration),
                 configuration,
                 resolvedLibraries,
-                listOf()
+                listOf(),
+                IrDeclarationFactoryImpl,
             ).module.descriptor.packagesSerialized()
         }
 

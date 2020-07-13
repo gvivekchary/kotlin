@@ -31,6 +31,7 @@ import org.jetbrains.kotlin.incremental.js.IncrementalDataProvider
 import org.jetbrains.kotlin.incremental.js.IncrementalNextRoundChecker
 import org.jetbrains.kotlin.incremental.js.IncrementalResultsConsumer
 import org.jetbrains.kotlin.ir.backend.js.*
+import org.jetbrains.kotlin.ir.declarations.impl.IrDeclarationFactoryImpl
 import org.jetbrains.kotlin.js.config.EcmaVersion
 import org.jetbrains.kotlin.js.config.JSConfigurationKeys
 import org.jetbrains.kotlin.js.config.JsConfig
@@ -193,6 +194,7 @@ class K2JsIrCompiler : CLICompiler<K2JSCompilerArguments>() {
                     configuration = config.configuration,
                     allDependencies = resolvedLibraries,
                     friendDependencies = friendDependencies,
+                    declarationFactory = IrDeclarationFactoryImpl,
                     outputKlibPath = outputKlibPath,
                     nopack = arguments.irProduceKlibDir
                 )

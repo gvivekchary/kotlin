@@ -7,10 +7,10 @@ package org.jetbrains.kotlin.fir.backend
 
 import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.fir.FirSession
+import org.jetbrains.kotlin.fir.backend.evaluate.evaluateConstants
 import org.jetbrains.kotlin.fir.backend.generators.AnnotationGenerator
 import org.jetbrains.kotlin.fir.backend.generators.CallAndReferenceGenerator
 import org.jetbrains.kotlin.fir.backend.generators.FakeOverrideGenerator
-import org.jetbrains.kotlin.fir.backend.evaluate.evaluateConstants
 import org.jetbrains.kotlin.fir.declarations.*
 import org.jetbrains.kotlin.fir.descriptors.FirModuleDescriptor
 import org.jetbrains.kotlin.fir.psi
@@ -187,13 +187,13 @@ class Fir2IrConverter(
             scopeSession: ScopeSession,
             firFiles: List<FirFile>,
             languageVersionSettings: LanguageVersionSettings,
-            fakeOverrideMode: FakeOverrideMode = FakeOverrideMode.NORMAL,
             signaturer: IdSignatureComposer,
             generatorExtensions: GeneratorExtensions,
-            mangler: FirMangler
+            mangler: FirMangler,
+            declarationFactory: IrDeclarationFactory,
         ): Fir2IrResult {
             val moduleDescriptor = FirModuleDescriptor(session)
-            val symbolTable = SymbolTable(signaturer)
+            val symbolTable = SymbolTable(signaturer, declarationFactory)
             val constantValueGenerator = ConstantValueGenerator(moduleDescriptor, symbolTable)
             val typeTranslator = TypeTranslator(
                 symbolTable,
@@ -235,7 +235,7 @@ class Fir2IrConverter(
                 converter.processClassHeaders(firFile)
             }
             val fakeOverrideGenerator = FakeOverrideGenerator(
-                session, scopeSession, classifierStorage, declarationStorage, conversionScope, fakeOverrideMode
+                session, scopeSession, classifierStorage, declarationStorage, conversionScope, FakeOverrideMode.NORMAL
             )
             components.fakeOverrideGenerator = fakeOverrideGenerator
             for (firFile in firFiles) {
