@@ -18,8 +18,8 @@ import org.jetbrains.kotlin.ir.backend.js.JsSharedVariablesManager
 import org.jetbrains.kotlin.ir.backend.js.ir.JsIrDeclarationBuilder
 import org.jetbrains.kotlin.ir.backend.js.lower.JsInnerClassesSupport
 import org.jetbrains.kotlin.ir.declarations.*
-import org.jetbrains.kotlin.ir.declarations.impl.IrDeclarationFactoryImpl
 import org.jetbrains.kotlin.ir.declarations.impl.IrExternalPackageFragmentImpl
+import org.jetbrains.kotlin.ir.declarations.persisting.PersistingIrDeclarationFactory
 import org.jetbrains.kotlin.ir.descriptors.IrBuiltIns
 import org.jetbrains.kotlin.ir.symbols.IrClassSymbol
 import org.jetbrains.kotlin.ir.symbols.IrExternalPackageFragmentSymbol
@@ -43,7 +43,7 @@ class WasmBackendContext(
     override val transformedFunction = mutableMapOf<IrFunctionSymbol, IrSimpleFunctionSymbol>()
     override val lateinitNullableFields = mutableMapOf<IrField, IrField>()
     override val extractedLocalClasses: MutableSet<IrClass> = hashSetOf()
-    override val declarationFactory: IrDeclarationFactory = IrDeclarationFactoryImpl
+    override val declarationFactory: IrDeclarationFactory = PersistingIrDeclarationFactory
     override val jsIrDeclarationBuilder: JsIrDeclarationBuilder = JsIrDeclarationBuilder(declarationFactory)
 
     // Place to store declarations excluded from code generation

@@ -3,22 +3,22 @@
  * that can be found in the license/LICENSE.txt file.
  */
 
-package org.jetbrains.kotlin.ir.declarations.impl.carriers
+package org.jetbrains.kotlin.ir.declarations.persisting.carriers
 
 import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
 import org.jetbrains.kotlin.ir.declarations.IrDeclarationParent
 import org.jetbrains.kotlin.ir.expressions.IrConstructorCall
 
-interface TypeParameterCarrier : DeclarationCarrier {
+interface ErrorCarrier : DeclarationCarrier {
 
-    override fun clone(): TypeParameterCarrier {
-        return TypeParameterCarrierImpl(lastModified, parentField, originField, annotationsField)
+    override fun clone(): ErrorCarrier {
+        return ErrorCarrierImpl(lastModified, parentField, originField, annotationsField)
     }
 }
 
-class TypeParameterCarrierImpl(
+class ErrorCarrierImpl(
     override val lastModified: Int,
     override var parentField: IrDeclarationParent?,
     override var originField: IrDeclarationOrigin,
     override var annotationsField: List<IrConstructorCall>
-) : TypeParameterCarrier
+) : ErrorCarrier

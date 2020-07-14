@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.cli.common.messages.*
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.config.*
-import org.jetbrains.kotlin.ir.declarations.impl.IrDeclarationFactoryImpl
+import org.jetbrains.kotlin.ir.declarations.persisting.PersistingIrDeclarationFactory
 import org.jetbrains.kotlin.js.config.JSConfigurationKeys
 import org.jetbrains.kotlin.library.resolver.KotlinLibraryResolveResult
 import org.jetbrains.kotlin.psi.KtFile
@@ -88,7 +88,7 @@ fun buildKLib(
         configuration = configuration,
         allDependencies = allDependencies,
         friendDependencies = emptyList(),
-        declarationFactory = IrDeclarationFactoryImpl,
+        declarationFactory = PersistingIrDeclarationFactory,
         outputKlibPath = outputPath,
         nopack = true
     )
