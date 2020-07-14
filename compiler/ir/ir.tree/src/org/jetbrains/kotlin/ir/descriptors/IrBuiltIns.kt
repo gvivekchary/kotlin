@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.descriptors.impl.TypeParameterDescriptorImpl
 import org.jetbrains.kotlin.descriptors.impl.ValueParameterDescriptorImpl
 import org.jetbrains.kotlin.incremental.components.NoLookupLocation
 import org.jetbrains.kotlin.ir.UNDEFINED_OFFSET
+import org.jetbrains.kotlin.ir.declarations.IrDeclarationFactory
 import org.jetbrains.kotlin.ir.declarations.IrDeclarationOriginImpl
 import org.jetbrains.kotlin.ir.declarations.impl.IrExternalPackageFragmentImpl
 import org.jetbrains.kotlin.ir.symbols.IrClassSymbol
@@ -42,7 +43,7 @@ class IrBuiltIns(
     val languageVersionSettings = typeTranslator.languageVersionSettings
 
     lateinit var functionFactory: IrAbstractFunctionFactory
-    private val declarationFactory = symbolTable.declarationFactory
+    val declarationFactory: IrDeclarationFactory = symbolTable.declarationFactory
 
     private val builtInsModule = builtIns.builtInsModule
 

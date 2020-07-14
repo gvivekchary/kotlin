@@ -71,7 +71,7 @@ class BodyGenerator(
     }
 
     fun generateExpressionBody(ktExpression: KtExpression): IrExpressionBody =
-        IrExpressionBodyImpl(createStatementGenerator().generateExpression(ktExpression))
+        context.declarationFactory.createExpressionBody(createStatementGenerator().generateExpression(ktExpression))
 
     fun generateLambdaBody(ktFun: KtFunctionLiteral): IrBody {
         val statementGenerator = createStatementGenerator()
