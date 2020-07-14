@@ -17,9 +17,11 @@ import org.jetbrains.kotlin.ir.backend.js.JsCommonBackendContext
 import org.jetbrains.kotlin.ir.backend.js.ir.JsIrBuilder
 import org.jetbrains.kotlin.ir.builders.*
 import org.jetbrains.kotlin.ir.builders.declarations.buildField
-import org.jetbrains.kotlin.ir.declarations.*
+import org.jetbrains.kotlin.ir.declarations.IrClass
+import org.jetbrains.kotlin.ir.declarations.IrConstructor
+import org.jetbrains.kotlin.ir.declarations.IrDeclaration
+import org.jetbrains.kotlin.ir.declarations.IrVariable
 import org.jetbrains.kotlin.ir.expressions.*
-import org.jetbrains.kotlin.ir.expressions.impl.IrBlockBodyImpl
 import org.jetbrains.kotlin.ir.types.makeNullable
 import org.jetbrains.kotlin.ir.util.*
 import org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid
@@ -52,7 +54,7 @@ class ObjectDeclarationLowering(
 
         val primaryConstructor = declaration.primaryConstructor ?: declaration.syntheticPrimaryConstructor!!
 
-        getInstanceFun.body = IrBlockBodyImpl(UNDEFINED_OFFSET, UNDEFINED_OFFSET) {
+        getInstanceFun.body = context.declarationFactory.createBlockBody(UNDEFINED_OFFSET, UNDEFINED_OFFSET) {
             statements += context.createIrBuilder(getInstanceFun.symbol).irBlockBody(getInstanceFun) {
                 +irIfThen(
                     irEqualsNull(irGetField(null, instanceField)),

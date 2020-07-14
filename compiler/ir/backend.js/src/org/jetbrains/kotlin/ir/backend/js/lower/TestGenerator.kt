@@ -54,7 +54,7 @@ class TestGenerator(val context: JsIrBackendContext, val testContainerFactory: (
         parentFunction: IrSimpleFunction,
         ignored: Boolean = false
     ): FunctionWithBody {
-        val body = JsIrBuilder.buildBlockBody(emptyList())
+        val body = context.jsIrDeclarationBuilder.buildBlockBody(emptyList())
 
         val function = context.jsIrDeclarationBuilder.buildFunction("$name test fun", context.irBuiltIns.anyNType, parentFunction)
         function.body = body

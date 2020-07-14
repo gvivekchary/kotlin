@@ -8,12 +8,12 @@ package org.jetbrains.kotlin.ir.backend.js.ir
 import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.descriptors.Visibilities
 import org.jetbrains.kotlin.descriptors.Visibility
+import org.jetbrains.kotlin.ir.IrStatement
+import org.jetbrains.kotlin.ir.UNDEFINED_OFFSET
 import org.jetbrains.kotlin.ir.builders.declarations.buildFun
 import org.jetbrains.kotlin.ir.builders.declarations.buildValueParameter
-import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
-import org.jetbrains.kotlin.ir.declarations.IrDeclarationParent
-import org.jetbrains.kotlin.ir.declarations.IrSimpleFunction
-import org.jetbrains.kotlin.ir.declarations.IrValueParameter
+import org.jetbrains.kotlin.ir.declarations.*
+import org.jetbrains.kotlin.ir.expressions.IrBlockBody
 import org.jetbrains.kotlin.ir.types.IrType
 import org.jetbrains.kotlin.name.Name
 
@@ -79,4 +79,7 @@ class JsIrDeclarationBuilder(private val declarationFactory: IrDeclarationFactor
     }.also {
         it.parent = parent
     }
+
+    fun buildBlockBody(statements: List<IrStatement>): IrBlockBody =
+        declarationFactory.createBlockBody(UNDEFINED_OFFSET, UNDEFINED_OFFSET, statements)
 }

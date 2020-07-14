@@ -115,7 +115,7 @@ class ES6AddInternalParametersToConstructorPhase(val context: JsIrBackendContext
         ).apply {
             addValueParameter("\$this\$", context.dynamicType)
 
-            body = JsIrBuilder.buildBlockBody(constructor.body?.statements ?: emptyList())
+            body = context.jsIrDeclarationBuilder.buildBlockBody(constructor.body?.statements ?: emptyList())
 
             transformChildren(object : IrElementTransformerVoid() {
                 override fun visitGetValue(expression: IrGetValue): IrExpression {

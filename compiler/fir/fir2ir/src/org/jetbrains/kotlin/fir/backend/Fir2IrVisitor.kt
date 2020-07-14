@@ -567,7 +567,7 @@ class Fir2IrVisitor(
     internal fun convertToIrBlockBody(block: FirBlock): IrBlockBody {
         return block.convertWithOffsets { startOffset, endOffset ->
             val irStatements = block.mapToIrStatements()
-            IrBlockBodyImpl(
+            declarationFactory.createBlockBody(
                 startOffset, endOffset,
                 if (irStatements.isNotEmpty()) {
                     irStatements.filterNotNull().takeIf { it.isNotEmpty() }
