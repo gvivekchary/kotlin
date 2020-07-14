@@ -18,6 +18,7 @@ package org.jetbrains.kotlin.ir.declarations.impl
 
 import org.jetbrains.kotlin.descriptors.VariableDescriptor
 import org.jetbrains.kotlin.ir.ObsoleteDescriptorBasedAPI
+import org.jetbrains.kotlin.ir.declarations.IrDeclarationFactory
 import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
 import org.jetbrains.kotlin.ir.declarations.IrDeclarationParent
 import org.jetbrains.kotlin.ir.declarations.IrVariable
@@ -59,6 +60,9 @@ class IrVariableImpl(
     override val descriptor: VariableDescriptor get() = symbol.descriptor
 
     override var initializer: IrExpression? = null
+
+    override val factory: IrDeclarationFactory
+        get() = error("Create IrVariableImpl directly")
 
     override fun <R, D> accept(visitor: IrElementVisitor<R, D>, data: D): R =
         visitor.visitVariable(this, data)

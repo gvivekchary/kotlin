@@ -32,6 +32,9 @@ abstract class IrDeclarationBase<T : DeclarationCarrier>(
     IrDeclaration,
     DeclarationCarrier {
 
+    override val factory: IrDeclarationFactory
+        get() = IrDeclarationFactoryImpl
+
     override var parentField: IrDeclarationParent? = null
 
     // TODO reduce boilerplate
