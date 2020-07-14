@@ -178,7 +178,7 @@ abstract class ClassCodegen protected constructor(
             field.initializer!!.expression, context.irBuiltIns.unitType
         )
         if (classInitializer == null) {
-            classInitializer = buildFun {
+            classInitializer = context.declarationFactory.buildFun {
                 name = Name.special("<clinit>")
                 returnType = context.irBuiltIns.unitType
             }.apply {

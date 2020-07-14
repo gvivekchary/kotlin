@@ -589,7 +589,7 @@ class LocalDeclarationsLowering(
             // TODO: consider using fields to access the closure of enclosing class.
             val (capturedValues, capturedTypeParameters) = localFunctionContext.closure
 
-            val newDeclaration = buildFun(oldDeclaration.descriptor) {
+            val newDeclaration = context.declarationFactory.buildFun(oldDeclaration.descriptor) {
                 updateFrom(oldDeclaration)
                 name = newName
                 visibility = Visibilities.PRIVATE
@@ -688,7 +688,7 @@ class LocalDeclarationsLowering(
             val localClassContext = localClasses[oldDeclaration.parent]!!
             val capturedValues = localClassContext.closure.capturedValues
 
-            val newDeclaration = buildConstructor(oldDeclaration.descriptor) {
+            val newDeclaration = context.declarationFactory.buildConstructor(oldDeclaration.descriptor) {
                 updateFrom(oldDeclaration)
                 visibility = visibilityPolicy.forConstructor(oldDeclaration, constructorContext.inInlineFunctionScope)
                 returnType = oldDeclaration.returnType
@@ -724,7 +724,7 @@ class LocalDeclarationsLowering(
             fieldType: IrType,
             isCrossinline: Boolean
         ): IrField =
-            buildField {
+            context.declarationFactory.buildField {
                 this.startOffset = startOffset
                 this.endOffset = endOffset
                 this.origin =

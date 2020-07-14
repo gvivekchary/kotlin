@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.ir.UNDEFINED_OFFSET
 import org.jetbrains.kotlin.ir.builders.*
 import org.jetbrains.kotlin.ir.builders.declarations.*
 import org.jetbrains.kotlin.ir.declarations.*
+import org.jetbrains.kotlin.ir.declarations.impl.IrDeclarationFactoryImpl
 import org.jetbrains.kotlin.ir.declarations.impl.IrExternalPackageFragmentImpl
 import org.jetbrains.kotlin.ir.expressions.IrCall
 import org.jetbrains.kotlin.ir.expressions.IrExpression
@@ -57,6 +58,8 @@ private class AndroidIrTransformer(val extension: AndroidIrExtension, val plugin
     private val cachedMethods = mutableMapOf<FqName, IrSimpleFunction>()
     private val cachedFields = mutableMapOf<FqName, IrField>()
 
+    private val declarationFactory: IrDeclarationFactory = IrDeclarationFactoryImpl
+
     private fun createPackage(fqName: FqName) =
         cachedPackages.getOrPut(fqName) {
             IrExternalPackageFragmentImpl.createEmptyExternalPackageFragment(pluginContext.moduleDescriptor, fqName)
@@ -64,7 +67,7 @@ private class AndroidIrTransformer(val extension: AndroidIrExtension, val plugin
 
     private fun createClass(fqName: FqName, isInterface: Boolean = false) =
         cachedClasses.getOrPut(fqName) {
-            buildClass {
+            declarationFactory.buildClass {
                 name = fqName.shortName()
                 kind = if (isInterface) ClassKind.INTERFACE else ClassKind.CLASS
                 origin = IrDeclarationOrigin.IR_EXTERNAL_JAVA_DECLARATION_STUB

@@ -127,7 +127,7 @@ fun breakCrossModuleFieldAccess(
     fun IrField.getter(): IrSimpleFunction {
         return fieldToGetter.getOrPut(this) {
             val fieldName = name
-            val getter = buildFun {
+            val getter = context.declarationFactory.buildFun {
                 name = Name.identifier("get-$fieldName")
                 returnType = type
             }
@@ -151,7 +151,7 @@ fun breakCrossModuleFieldAccess(
     fun IrField.setter(): IrSimpleFunction {
         return fieldToSetter.getOrPut(this) {
             val fieldName = name
-            val setter = buildFun {
+            val setter = context.declarationFactory.buildFun {
                 name = Name.identifier("set-$fieldName")
                 returnType = context.irBuiltIns.unitType
             }

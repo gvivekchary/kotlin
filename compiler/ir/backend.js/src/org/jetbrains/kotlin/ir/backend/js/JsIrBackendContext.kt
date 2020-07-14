@@ -56,7 +56,7 @@ class JsIrBackendContext(
     override var inVerbosePhase: Boolean = false
 
     override val declarationFactory: IrDeclarationFactory = IrDeclarationFactoryImpl
-    override val jsIrDeclarationBuilder: JsIrDeclarationBuilder = JsIrDeclarationBuilder()
+    override val jsIrDeclarationBuilder: JsIrDeclarationBuilder = JsIrDeclarationBuilder(declarationFactory)
 
     val devMode = configuration[JSConfigurationKeys.DEVELOPER_MODE] ?: false
 
@@ -139,7 +139,7 @@ class JsIrBackendContext(
         get() = testContainerFuns
 
     override val mapping = JsMapping()
-    val innerClassesSupport = JsInnerClassesSupport(mapping)
+    val innerClassesSupport = JsInnerClassesSupport(mapping, declarationFactory)
 
     companion object {
         val KOTLIN_PACKAGE_FQN = FqName.fromSegments(listOf("kotlin"))

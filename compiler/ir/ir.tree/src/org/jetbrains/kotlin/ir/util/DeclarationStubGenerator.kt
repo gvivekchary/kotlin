@@ -106,7 +106,7 @@ class DeclarationStubGenerator(
         val packageFragment = directMember.containingDeclaration as? PackageFragmentDescriptor ?: return null
         val containerSource = directMember.safeAs<DescriptorWithContainerSource>()?.containerSource ?: return null
         return facadeClassMap.getOrPut(containerSource) {
-            extensions.generateFacadeClass(containerSource)?.also { facade ->
+            extensions.generateFacadeClass(symbolTable.declarationFactory, containerSource)?.also { facade ->
                 val packageStub = generateOrGetEmptyExternalPackageFragmentStub(packageFragment)
                 facade.parent = packageStub
                 packageStub.declarations.add(facade)

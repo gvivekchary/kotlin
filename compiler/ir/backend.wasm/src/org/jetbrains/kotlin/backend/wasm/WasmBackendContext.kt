@@ -44,7 +44,7 @@ class WasmBackendContext(
     override val lateinitNullableFields = mutableMapOf<IrField, IrField>()
     override val extractedLocalClasses: MutableSet<IrClass> = hashSetOf()
     override val declarationFactory: IrDeclarationFactory = IrDeclarationFactoryImpl
-    override val jsIrDeclarationBuilder: JsIrDeclarationBuilder = JsIrDeclarationBuilder()
+    override val jsIrDeclarationBuilder: JsIrDeclarationBuilder = JsIrDeclarationBuilder(declarationFactory)
 
     // Place to store declarations excluded from code generation
     val excludedDeclarations: IrPackageFragment by lazy {
@@ -56,7 +56,7 @@ class WasmBackendContext(
 
     override val mapping = JsMapping()
 
-    val innerClassesSupport = JsInnerClassesSupport(mapping)
+    val innerClassesSupport = JsInnerClassesSupport(mapping, declarationFactory)
 
     val objectToGetInstanceFunction = mutableMapOf<IrClassSymbol, IrSimpleFunction>()
     override val internalPackageFqn = FqName("kotlin.wasm")

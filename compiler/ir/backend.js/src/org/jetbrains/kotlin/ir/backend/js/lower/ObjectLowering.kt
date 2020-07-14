@@ -39,7 +39,7 @@ class ObjectDeclarationLowering(
 
         val getInstanceFun = context.getOrCreateGetInstanceFunction(declaration)
 
-        val instanceField = buildField {
+        val instanceField = context.declarationFactory.buildField {
             name = Name.identifier(declaration.name.asString() + "_instance")
             type = declaration.defaultType.makeNullable()
             isStatic = true

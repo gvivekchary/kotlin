@@ -32,7 +32,10 @@ import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 /**
  * Keeps track of replacement functions and inline class box/unbox functions.
  */
-class MemoizedInlineClassReplacements(private val mangleReturnTypes: Boolean) {
+class MemoizedInlineClassReplacements(
+    private val mangleReturnTypes: Boolean,
+    private val declarationFactory: IrDeclarationFactory
+) {
     private val storageManager = LockBasedStorageManager("inline-class-replacements")
     private val propertyMap = mutableMapOf<IrPropertySymbol, IrProperty>()
 
@@ -75,7 +78,7 @@ class MemoizedInlineClassReplacements(private val mangleReturnTypes: Boolean) {
     val getBoxFunction: (IrClass) -> IrSimpleFunction =
         storageManager.createMemoizedFunction { irClass ->
             require(irClass.isInline)
-            buildFun {
+            declarationFactory.buildFun {
                 name = Name.identifier(KotlinTypeMapper.BOX_JVM_METHOD_NAME)
                 origin = JvmLoweredDeclarationOrigin.SYNTHETIC_INLINE_CLASS_MEMBER
                 returnType = irClass.defaultType
@@ -96,7 +99,7 @@ class MemoizedInlineClassReplacements(private val mangleReturnTypes: Boolean) {
     val getUnboxFunction: (IrClass) -> IrSimpleFunction =
         storageManager.createMemoizedFunction { irClass ->
             require(irClass.isInline)
-            buildFun {
+            declarationFactory.buildFun {
                 name = Name.identifier(KotlinTypeMapper.UNBOX_JVM_METHOD_NAME)
                 origin = JvmLoweredDeclarationOrigin.SYNTHETIC_INLINE_CLASS_MEMBER
                 returnType = InlineClassAbi.getUnderlyingType(irClass)
@@ -110,7 +113,7 @@ class MemoizedInlineClassReplacements(private val mangleReturnTypes: Boolean) {
     fun getSpecializedEqualsMethod(irClass: IrClass, irBuiltIns: IrBuiltIns): IrSimpleFunction {
         require(irClass.isInline)
         return specializedEqualsCache.computeIfAbsent(irClass) {
-            buildFun {
+            declarationFactory.buildFun {
                 name = InlineClassDescriptorResolver.SPECIALIZED_EQUALS_NAME
                 // TODO: Revisit this once we allow user defined equals methods in inline classes.
                 origin = JvmLoweredDeclarationOrigin.INLINE_CLASS_GENERATED_IMPL_METHOD
@@ -184,7 +187,7 @@ class MemoizedInlineClassReplacements(private val mangleReturnTypes: Boolean) {
         replacementOrigin: IrDeclarationOrigin,
         noFakeOverride: Boolean = false,
         body: IrFunction.() -> Unit
-    ): IrSimpleFunction = buildFun(function.descriptor) {
+    ): IrSimpleFunction = declarationFactory.buildFun(function.descriptor) {
         updateFrom(function)
         if (function is IrConstructor) {
             // The [updateFrom] call will set the modality to FINAL for constructors, while the JVM backend would use OPEN here.
@@ -216,7 +219,7 @@ class MemoizedInlineClassReplacements(private val mangleReturnTypes: Boolean) {
             val propertySymbol = function.correspondingPropertySymbol
             if (propertySymbol != null) {
                 val property = propertyMap.getOrPut(propertySymbol) {
-                    buildProperty(propertySymbol.descriptor) {
+                    declarationFactory.buildProperty(propertySymbol.descriptor) {
                         name = propertySymbol.owner.name
                         updateFrom(propertySymbol.owner)
                     }.apply {

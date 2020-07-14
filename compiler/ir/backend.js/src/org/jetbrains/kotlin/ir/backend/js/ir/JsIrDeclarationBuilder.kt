@@ -17,8 +17,8 @@ import org.jetbrains.kotlin.ir.declarations.IrValueParameter
 import org.jetbrains.kotlin.ir.types.IrType
 import org.jetbrains.kotlin.name.Name
 
-class JsIrDeclarationBuilder {
-    fun buildValueParameter(parent: IrDeclarationParent, name: String, index: Int, type: IrType): IrValueParameter =
+class JsIrDeclarationBuilder(private val declarationFactory: IrDeclarationFactory) {
+    fun buildValueParameter(parent: IrFunction, name: String, index: Int, type: IrType): IrValueParameter =
         buildValueParameter(parent) {
             this.origin = JsIrBuilder.SYNTHESIZED_DECLARATION
             this.name = Name.identifier(name)
@@ -62,7 +62,7 @@ class JsIrDeclarationBuilder {
         isInfix: Boolean = false,
         isFakeOverride: Boolean = false,
         origin: IrDeclarationOrigin = JsIrBuilder.SYNTHESIZED_DECLARATION,
-    ): IrSimpleFunction = buildFun {
+    ): IrSimpleFunction = declarationFactory.buildFun {
         this.origin = origin
         this.name = name
         this.visibility = visibility

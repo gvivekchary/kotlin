@@ -505,7 +505,7 @@ private fun IrFunction.generateDefaultsFunctionImpl(
 ): IrFunction {
     val newFunction = when (this) {
         is IrConstructor ->
-            buildConstructor {
+            factory.buildConstructor {
                 updateFrom(this@generateDefaultsFunctionImpl)
                 origin = newOrigin
                 isExternal = false
@@ -514,7 +514,7 @@ private fun IrFunction.generateDefaultsFunctionImpl(
                 visibility = newVisibility
             }
         is IrSimpleFunction ->
-            buildFun(descriptor) {
+            factory.buildFun(descriptor) {
                 updateFrom(this@generateDefaultsFunctionImpl)
                 name = Name.identifier("${this@generateDefaultsFunctionImpl.name}\$default")
                 origin = newOrigin

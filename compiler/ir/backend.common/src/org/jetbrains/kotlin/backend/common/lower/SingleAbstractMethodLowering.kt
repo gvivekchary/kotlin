@@ -159,7 +159,7 @@ abstract class SingleAbstractMethodLowering(val context: CommonBackendContext) :
                 context.ir.symbols.functionN(superMethod.valueParameters.size + extensionReceiversCount).owner
         val wrappedFunctionType = wrappedFunctionClass.defaultType
 
-        val subclass = buildClass {
+        val subclass = context.declarationFactory.buildClass {
             name = wrapperName
             origin = IrDeclarationOrigin.GENERATED_SAM_IMPLEMENTATION
             visibility = wrapperVisibility
