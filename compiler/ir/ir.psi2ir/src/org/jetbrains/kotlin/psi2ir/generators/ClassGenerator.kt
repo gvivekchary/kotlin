@@ -85,7 +85,7 @@ class ClassGenerator(
         val modality = getEffectiveModality(ktClassOrObject, classDescriptor)
 
         return context.symbolTable.declareClass(classDescriptor) {
-            createIrClassFromDescriptor(
+            context.declarationFactory.createIrClassFromDescriptor(
                 startOffset, endOffset, IrDeclarationOrigin.DEFINED, it, classDescriptor,
                 context.symbolTable.nameProvider.nameForDeclaration(classDescriptor), visibility, modality
             ).apply {

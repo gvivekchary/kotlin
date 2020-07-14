@@ -108,6 +108,5 @@ private class StaticDefaultCallLowering(
 
 private fun JvmBackendContext.getStaticFunctionWithReceivers(function: IrFunction) =
     staticDefaultStubs.getOrPut(function.symbol) {
-        createStaticFunctionWithReceivers(function.parent, function.name, function)
+        declarationFactory.createStaticFunctionWithReceivers(function.parent, function.name, function)
     }
-
