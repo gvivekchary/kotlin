@@ -26,6 +26,7 @@ import org.jetbrains.kotlin.backend.common.lower.loops.handlers.UntilHandler
 import org.jetbrains.kotlin.backend.common.lower.loops.handlers.WithIndexHandler
 import org.jetbrains.kotlin.backend.common.lower.matchers.IrCallMatcher
 import org.jetbrains.kotlin.ir.IrElement
+import org.jetbrains.kotlin.ir.IrStatement
 import org.jetbrains.kotlin.ir.declarations.IrVariable
 import org.jetbrains.kotlin.ir.expressions.IrCall
 import org.jetbrains.kotlin.ir.expressions.IrExpression
@@ -79,7 +80,7 @@ internal class ProgressionHeaderInfo(
     canOverflow: Boolean? = null,
     direction: ProgressionDirection,
     additionalNotEmptyCondition: IrExpression? = null,
-    val additionalVariables: List<IrVariable> = listOf()
+    val additionalStatements: List<IrStatement> = listOf()
 ) : NumericHeaderInfo(
     progressionType, first, last, step,
     canCacheLast = true,
@@ -156,7 +157,7 @@ internal class ProgressionHeaderInfo(
         isReversed = !isReversed,
         direction = direction.asReversed(),
         additionalNotEmptyCondition = additionalNotEmptyCondition,
-        additionalVariables = additionalVariables
+        additionalStatements = additionalStatements
     )
 }
 
