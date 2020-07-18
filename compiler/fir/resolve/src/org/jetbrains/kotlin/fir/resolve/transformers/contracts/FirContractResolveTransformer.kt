@@ -7,6 +7,7 @@ package org.jetbrains.kotlin.fir.resolve.transformers.contracts
 
 import org.jetbrains.kotlin.fir.FirSession
 import org.jetbrains.kotlin.fir.contracts.FirRawContractDescription
+import org.jetbrains.kotlin.fir.contracts.builder.buildEffectDeclaration
 import org.jetbrains.kotlin.fir.contracts.builder.buildResolvedContractDescription
 import org.jetbrains.kotlin.fir.contracts.description.ConeEffectDeclaration
 import org.jetbrains.kotlin.fir.contracts.impl.FirEmptyContractDescription
@@ -137,7 +138,9 @@ class FirContractResolveTransformer(
                     if (effect == null) {
                         unresolvedEffects += statement
                     } else {
-                        effects += effect
+                        effects += buildEffectDeclaration {
+                            this.effect = effect
+                        }
                     }
                 }
             }

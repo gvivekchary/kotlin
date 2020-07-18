@@ -8,6 +8,15 @@ package org.jetbrains.kotlin.fir.contracts.description
 import org.jetbrains.kotlin.contracts.description.expressions.*
 
 class ConeContractRenderer(private val builder: StringBuilder) : ConeContractDescriptionVisitor<Unit, Nothing?>() {
+    override fun visitEffectDeclaration(effectDeclaration: ConeEffectDeclaration, data: Nothing?) {
+        when (effectDeclaration) {
+            is ConeConditionalEffectDeclaration -> visitConditionalEffectDeclaration(effectDeclaration, data)
+            is ConeReturnsEffectDeclaration -> visitReturnsEffectDeclaration(effectDeclaration, data)
+            is ConeCallsEffectDeclaration -> visitCallsEffectDeclaration(effectDeclaration, data)
+            else -> throw IllegalStateException("$effectDeclaration doesn't match any known effects type")
+        }
+    }
+
     override fun visitConditionalEffectDeclaration(conditionalEffect: ConeConditionalEffectDeclaration, data: Nothing?) {
         conditionalEffect.effect.accept(this, data)
         builder.append(" -> ")

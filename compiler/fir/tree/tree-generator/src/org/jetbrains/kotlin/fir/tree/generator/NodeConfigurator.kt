@@ -600,12 +600,16 @@ object NodeConfigurator : AbstractFieldConfigurator<FirTreeBuilder>(FirTreeBuild
             +field(varianceType)
         }
 
+        effectDeclaration.configure {
+            +field("effect", effectDeclarationType)
+        }
+
         rawContractDescription.configure {
             +field("contractCall", functionCall)
         }
 
         resolvedContractDescription.configure {
-            +fieldList("effects", effectDeclarationType)
+            +fieldList("effects", effectDeclaration)
             +fieldList("unresolvedEffects", statement)
         }
     }
