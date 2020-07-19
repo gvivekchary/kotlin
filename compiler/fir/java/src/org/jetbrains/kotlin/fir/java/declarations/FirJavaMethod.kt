@@ -65,11 +65,11 @@ class FirJavaMethod @FirImplementationDetail constructor(
     body,
     status,
     containerSource,
-    contractDescription = FirEmptyContractDescription,
     name,
     symbol,
     annotations,
     typeParameters,
+    contractDescription = FirEmptyContractDescription
 )
 
 private val ALL_JAVA_OPERATION_NAMES =

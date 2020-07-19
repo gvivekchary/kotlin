@@ -129,10 +129,10 @@ class FirIntegerOperator @FirImplementationDetail constructor(
     body = null,
     status,
     containerSource = null,
-    contractDescription = FirEmptyContractDescription,
     kind.operatorName,
     symbol,
     annotations = mutableListOf(),
+    contractDescription = FirEmptyContractDescription,
 ) {
     enum class Kind(val unary: Boolean, val operatorName: Name) {
         PLUS(false, OperatorNameConventions.PLUS),

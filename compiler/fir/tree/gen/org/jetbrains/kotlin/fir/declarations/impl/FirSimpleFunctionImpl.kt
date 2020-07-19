@@ -42,11 +42,11 @@ open class FirSimpleFunctionImpl @FirImplementationDetail constructor(
     override var body: FirBlock?,
     override var status: FirDeclarationStatus,
     override val containerSource: DeserializedContainerSource?,
-    override var contractDescription: FirContractDescription,
     override val name: Name,
     override val symbol: FirFunctionSymbol<FirSimpleFunction>,
     override val annotations: MutableList<FirAnnotationCall>,
     override val typeParameters: MutableList<FirTypeParameter>,
+    override var contractDescription: FirContractDescription,
 ) : FirSimpleFunction() {
     override val attributes: FirDeclarationAttributes = FirDeclarationAttributes()
     override var controlFlowGraphReference: FirControlFlowGraphReference = FirEmptyControlFlowGraphReference
@@ -62,9 +62,9 @@ open class FirSimpleFunctionImpl @FirImplementationDetail constructor(
         valueParameters.forEach { it.accept(visitor, data) }
         body?.accept(visitor, data)
         status.accept(visitor, data)
-        contractDescription.accept(visitor, data)
         annotations.forEach { it.accept(visitor, data) }
         typeParameters.forEach { it.accept(visitor, data) }
+        contractDescription.accept(visitor, data)
     }
 
     override fun <D> transformChildren(transformer: FirTransformer<D>, data: D): FirSimpleFunctionImpl {
@@ -74,9 +74,9 @@ open class FirSimpleFunctionImpl @FirImplementationDetail constructor(
         transformValueParameters(transformer, data)
         transformBody(transformer, data)
         transformStatus(transformer, data)
-        transformContractDescription(transformer, data)
         transformAnnotations(transformer, data)
         transformTypeParameters(transformer, data)
+        transformContractDescription(transformer, data)
         return this
     }
 
@@ -110,13 +110,13 @@ open class FirSimpleFunctionImpl @FirImplementationDetail constructor(
         return this
     }
 
-    override fun <D> transformContractDescription(transformer: FirTransformer<D>, data: D): FirSimpleFunctionImpl {
-        contractDescription = contractDescription.transformSingle(transformer, data)
+    override fun <D> transformAnnotations(transformer: FirTransformer<D>, data: D): FirSimpleFunctionImpl {
+        annotations.transformInplace(transformer, data)
         return this
     }
 
-    override fun <D> transformAnnotations(transformer: FirTransformer<D>, data: D): FirSimpleFunctionImpl {
-        annotations.transformInplace(transformer, data)
+    override fun <D> transformContractDescription(transformer: FirTransformer<D>, data: D): FirSimpleFunctionImpl {
+        contractDescription = contractDescription.transformSingle(transformer, data)
         return this
     }
 
