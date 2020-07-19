@@ -296,6 +296,7 @@ object NodeConfigurator : AbstractFieldConfigurator<FirTreeBuilder>(FirTreeBuild
             +symbol("FirFunctionSymbol<FirSimpleFunction>")
             +annotations
             +typeParameters
+            +field("contractDescription", contractDescription)
         }
 
         contractDescriptionOwner.configure {
@@ -328,7 +329,7 @@ object NodeConfigurator : AbstractFieldConfigurator<FirTreeBuilder>(FirTreeBuild
             generateBooleanFields(
                 "expect", "actual", "override", "operator", "infix", "inline", "tailRec",
                 "external", "const", "lateInit", "inner", "companion", "data", "suspend", "static",
-                "fromSealedClass", "fromEnumClass", "fun"
+                "fromSealedClass", "fromEnumClass", "fun", "contract"
             )
         }
 
@@ -605,12 +606,16 @@ object NodeConfigurator : AbstractFieldConfigurator<FirTreeBuilder>(FirTreeBuild
         }
 
         rawContractDescription.configure {
-            +field("contractCall", functionCall)
+            +fieldList("rawEffects", expression)
         }
 
         resolvedContractDescription.configure {
             +fieldList("effects", effectDeclaration)
             +fieldList("unresolvedEffects", statement)
+        }
+
+        legacyRawContractDescription.configure {
+            +field("contractCall", functionCall)
         }
     }
 }

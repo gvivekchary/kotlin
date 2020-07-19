@@ -103,6 +103,16 @@ class FirRenderer(builder: StringBuilder, private val mode: RenderMode = RenderM
         }
     }
 
+    private fun List<FirElement>.renderSeparatedWithNewlines() {
+        for ((index, element) in this.withIndex()) {
+            if (index > 0) {
+                print(",")
+                newLine()
+            }
+            element.accept(this@FirRenderer)
+        }
+    }
+
     private fun List<ConeKotlinType>.renderTypesSeparated() {
         for ((index, element) in this.withIndex()) {
             if (index > 0) {
@@ -1153,11 +1163,20 @@ class FirRenderer(builder: StringBuilder, private val mode: RenderMode = RenderM
         visitNamedReference(errorNamedReference)
     }
 
+    override fun visitLegacyRawContractDescription(legacyRawContractDescription: FirLegacyRawContractDescription) {
+        newLine()
+        print("[Contract description]")
+        renderInBraces("<", ">") {
+            legacyRawContractDescription.contractCall.accept(this)
+            newLine()
+        }
+    }
+
     override fun visitRawContractDescription(rawContractDescription: FirRawContractDescription) {
         newLine()
         print("[Contract description]")
         renderInBraces("<", ">") {
-            rawContractDescription.contractCall.accept(this)
+            rawContractDescription.rawEffects.renderSeparatedWithNewlines()
             newLine()
         }
     }
@@ -1174,9 +1193,7 @@ class FirRenderer(builder: StringBuilder, private val mode: RenderMode = RenderM
         newLine()
         println("[R|Contract description]")
         renderInBraces("<", ">") {
-            for (effect in resolvedContractDescription.effects) {
-                println(buildString { effect.accept(ConeContractRenderer(this), null) })
-            }
+            resolvedContractDescription.effects.renderSeparatedWithNewlines()
         }
     }
 

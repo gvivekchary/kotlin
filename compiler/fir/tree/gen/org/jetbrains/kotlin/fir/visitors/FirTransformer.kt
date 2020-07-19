@@ -128,6 +128,7 @@ import org.jetbrains.kotlin.fir.types.FirImplicitTypeRef
 import org.jetbrains.kotlin.fir.types.FirComposedSuperTypeRef
 import org.jetbrains.kotlin.fir.contracts.FirEffectDeclaration
 import org.jetbrains.kotlin.fir.contracts.FirContractDescription
+import org.jetbrains.kotlin.fir.contracts.FirLegacyRawContractDescription
 import org.jetbrains.kotlin.fir.contracts.FirRawContractDescription
 import org.jetbrains.kotlin.fir.contracts.FirResolvedContractDescription
 import org.jetbrains.kotlin.fir.visitors.CompositeTransformResult
@@ -1131,6 +1132,10 @@ abstract class FirTransformer<in D> : FirVisitor<CompositeTransformResult<FirEle
 
     final override fun visitContractDescription(contractDescription: FirContractDescription, data: D): CompositeTransformResult<FirContractDescription> {
         return transformContractDescription(contractDescription, data)
+    }
+
+    final override fun visitLegacyRawContractDescription(legacyRawContractDescription: FirLegacyRawContractDescription, data: D): CompositeTransformResult<FirContractDescription> {
+        return transformLegacyRawContractDescription(legacyRawContractDescription, data)
     }
 
     final override fun visitRawContractDescription(rawContractDescription: FirRawContractDescription, data: D): CompositeTransformResult<FirContractDescription> {
