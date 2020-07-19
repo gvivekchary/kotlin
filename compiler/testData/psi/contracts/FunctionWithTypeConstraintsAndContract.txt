@@ -54,6 +54,32 @@ KtFile: FunctionWithTypeConstraintsAndContract.kt
         REFERENCE_EXPRESSION
           PsiElement(IDENTIFIER)('String')
     PsiWhiteSpace('\n    ')
+    PsiElement(where)('where')
+    PsiWhiteSpace(' ')
+    TYPE_CONSTRAINT_LIST
+      TYPE_CONSTRAINT
+        REFERENCE_EXPRESSION
+          PsiElement(IDENTIFIER)('T')
+        PsiWhiteSpace(' ')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        TYPE_REFERENCE
+          USER_TYPE
+            REFERENCE_EXPRESSION
+              PsiElement(IDENTIFIER)('MyClass')
+      PsiElement(COMMA)(',')
+      PsiWhiteSpace('\n          ')
+      TYPE_CONSTRAINT
+        REFERENCE_EXPRESSION
+          PsiElement(IDENTIFIER)('E')
+        PsiWhiteSpace(' ')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        TYPE_REFERENCE
+          USER_TYPE
+            REFERENCE_EXPRESSION
+              PsiElement(IDENTIFIER)('MyOtherClass')
+    PsiWhiteSpace('\n    ')
     PsiElement(contract)('contract')
     PsiWhiteSpace(' ')
     CONTRACT_EFFECT_LIST
@@ -119,32 +145,6 @@ KtFile: FunctionWithTypeConstraintsAndContract.kt
             PsiElement(RPAR)(')')
       PsiWhiteSpace('\n    ')
       PsiElement(RBRACKET)(']')
-    PsiWhiteSpace('\n    ')
-    PsiElement(where)('where')
-    PsiWhiteSpace(' ')
-    TYPE_CONSTRAINT_LIST
-      TYPE_CONSTRAINT
-        REFERENCE_EXPRESSION
-          PsiElement(IDENTIFIER)('T')
-        PsiWhiteSpace(' ')
-        PsiElement(COLON)(':')
-        PsiWhiteSpace(' ')
-        TYPE_REFERENCE
-          USER_TYPE
-            REFERENCE_EXPRESSION
-              PsiElement(IDENTIFIER)('MyClass')
-      PsiElement(COMMA)(',')
-      PsiWhiteSpace('\n          ')
-      TYPE_CONSTRAINT
-        REFERENCE_EXPRESSION
-          PsiElement(IDENTIFIER)('E')
-        PsiWhiteSpace(' ')
-        PsiElement(COLON)(':')
-        PsiWhiteSpace(' ')
-        TYPE_REFERENCE
-          USER_TYPE
-            REFERENCE_EXPRESSION
-              PsiElement(IDENTIFIER)('MyOtherClass')
     PsiWhiteSpace('\n')
     BLOCK
       PsiElement(LBRACE)('{')
