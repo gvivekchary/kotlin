@@ -40,6 +40,7 @@ repositories {
 dependencies {
     compile(kotlinStdlib())
     compile(project(":compiler:frontend"))
+    compile(projectTests(":compiler:tests-common"))
     compile(project(":compiler:cli"))
     compile(intellijCoreDep()) { includeJars("intellij-core") }
     compile(jpsStandalone()) { includeJars("jps-model") }
@@ -70,7 +71,7 @@ benchmark {
             iterationTime = 1
             iterationTimeUnit = "sec"
             param("isIR", true)
-            param("size", 1000)
+            param("size", 1000, 5000)
 
             include("CommonCallsBenchmark")
             //include("InferenceBaselineCallsBenchmark")
@@ -93,5 +94,23 @@ benchmark {
     }
     targets {
         register("main")
+    }
+}
+
+tasks.named("compileKotlin") {
+    doLast {
+        tasks.named("mainBenchmarkJar", Zip::class.java) {
+            isZip64 = true
+            archiveName = "benchmarks.jar"
+        }
+        tasks.named("mainBenchmark", JavaExec::class.java) {
+            systemProperty("idea.home.path", intellijRootDir().canonicalPath)
+        }
+        tasks.named("mainFirBenchmark", JavaExec::class.java) {
+            systemProperty("idea.home.path", intellijRootDir().canonicalPath)
+        }
+        tasks.named("mainNiBenchmark", JavaExec::class.java) {
+            systemProperty("idea.home.path", intellijRootDir().canonicalPath)
+        }
     }
 }
