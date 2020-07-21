@@ -114,3 +114,32 @@ tasks.named("compileKotlin") {
         }
     }
 }
+
+val resultFilePath = "$buildDir/benchmarks/jmh-result"
+
+tasks.register<JavaExec>("runBenchmark") {
+    val jmhArgs: String by project
+    val ideaHome = intellijRootDir().canonicalPath
+    main = "-jar"
+    doFirst {
+        val benchmarkJarPath = "$buildDir/benchmarks/main/jars/benchmarks.jar"
+        args = mutableListOf("-Didea.home.path=$ideaHome", benchmarkJarPath, "-rff", resultFilePath) + jmhArgs.split("\\s".toRegex())
+    }
+}
+
+tasks.register("buildStatisticValueAtTeamCity") {
+    val result = File(resultFilePath).readLines().drop(1)
+    for (line in result) {
+        val data = line.split("\\s".toRegex()).filter { it.isNotEmpty() }
+        val name = data[0].removeSuffix(".benchmark")
+        val isIR = data[1]
+        val size = data[2]
+        val useNI = data[3]
+        val score = data[6]
+
+        val irPostfix = if (isIR.toBoolean()) " isIR=true" else ""
+        val niPostfix = if (useNI.toBoolean() && !isIR.toBoolean()) " isNI=true" else ""
+
+        println("""##teamcity[buildStatisticValue key='$name size=$size${irPostfix}$niPostfix' value='$score']""")
+    }
+}
