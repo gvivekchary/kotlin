@@ -24,6 +24,9 @@ import org.jetbrains.kotlin.resolve.calls.checkers.isRestrictsSuspensionReceiver
 import org.jetbrains.kotlin.resolve.descriptorUtil.builtIns
 import org.jetbrains.kotlin.storage.LockBasedStorageManager
 import org.jetbrains.kotlin.types.KotlinType
+import java.util.logging.Logger
+
+private val log = Logger.getLogger("JvmRuntimeTypes")
 
 class JvmRuntimeTypes(
     module: ModuleDescriptor,
@@ -95,6 +98,13 @@ class JvmRuntimeTypes(
                 getOrCreateJvmSuspendFunctionView(descriptor, languageVersionSettings.supportsFeature(LanguageFeature.ReleaseCoroutines))
             else
                 descriptor
+
+        if (actualFunctionDescriptor.returnType == null) {
+            log.warning(
+                "Return type for function description is null. Super type cannot be calculated." +
+                        "initDesc=${descriptor}, actDesc=${actualFunctionDescriptor}"
+            )
+        }
 
         val functionType = createFunctionType(
             descriptor.builtIns,
