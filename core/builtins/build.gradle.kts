@@ -11,6 +11,7 @@ val builtinsNative = fileFrom(rootDir, "core", "builtins", "native")
 val kotlinReflectCommon = fileFrom(rootDir, "libraries/stdlib/src/kotlin/reflect/")
 val kotlinReflectJvm = fileFrom(rootDir, "libraries/stdlib/jvm/src/kotlin/reflect")
 val builtinsCherryPicked = fileFrom(buildDir, "src")
+val builtinsCherryPickedJvm = fileFrom(buildDir, "src-jvm")
 
 val runtimeElements by configurations.creating {
     isCanBeResolved = false
@@ -20,7 +21,24 @@ val runtimeElements by configurations.creating {
     }
 }
 
+val runtimeElementsJvm by configurations.creating {
+    isCanBeResolved = false
+    isCanBeConsumed = true
+    attributes {
+        attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements.JAR))
+        attribute(Attribute.of("builtins.platform", String::class.java), "JVM")
+    }
+}
+
 val prepareSources by tasks.registering(Sync::class) {
+    from(kotlinReflectCommon) {
+        exclude("typeOf.kt")
+        exclude("KClasses.kt")
+    }
+    into(builtinsCherryPicked)
+}
+
+val prepareSourcesJvm by tasks.registering(Sync::class) {
     from(kotlinReflectJvm) {
         exclude("TypesJVM.kt")
         exclude("KClassesImpl.kt")
@@ -31,7 +49,7 @@ val prepareSources by tasks.registering(Sync::class) {
         include("KTypeParameter.kt")
         include("KVariance.kt")
     }
-    into(builtinsCherryPicked)
+    into(builtinsCherryPickedJvm)
 }
 
 val serialize by tasks.registering(NoDebugJavaExec::class) {
@@ -52,17 +70,44 @@ val serialize by tasks.registering(NoDebugJavaExec::class) {
     )
 }
 
+val serializeJvm by tasks.registering(NoDebugJavaExec::class) {
+    dependsOn(prepareSourcesJvm)
+    val outDir = buildDir.resolve(name)
+    val inDirs = arrayOf(builtinsSrc, builtinsNative, builtinsCherryPickedJvm)
+    inDirs.forEach { inputs.dir(it).withPathSensitivity(RELATIVE) }
+
+    outputs.dir(outDir)
+    outputs.cacheIf { true }
+
+    classpath(rootProject.buildscript.configurations["bootstrapCompilerClasspath"])
+    main = "org.jetbrains.kotlin.serialization.builtins.RunKt"
+    jvmArgs("-Didea.io.use.nio2=true")
+    args(
+        pathRelativeToWorkingDir(outDir),
+        *inDirs.map(::pathRelativeToWorkingDir).toTypedArray()
+    )
+}
+
 val builtinsJar by task<Jar> {
     dependsOn(serialize)
     from(serialize) { include("kotlin/**") }
     destinationDir = File(buildDir, "libs")
 }
 
+val builtinsJvmJar by task<Jar> {
+    dependsOn(serializeJvm)
+    from(serializeJvm) { include("kotlin/**") }
+    archiveClassifier.set("jvm")
+    destinationDir = File(buildDir, "libs")
+}
+
 val assemble by tasks.getting {
     dependsOn(serialize)
+    dependsOn(serializeJvm)
 }
 
 val builtinsJarArtifact = artifacts.add(runtimeElements.name, builtinsJar)
+artifacts.add(runtimeElementsJvm.name, builtinsJvmJar)
 
 publishing {
     publications {
