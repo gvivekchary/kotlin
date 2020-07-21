@@ -52,41 +52,26 @@ val prepareSourcesJvm by tasks.registering(Sync::class) {
     into(builtinsCherryPickedJvm)
 }
 
-val serialize by tasks.registering(NoDebugJavaExec::class) {
-    dependsOn(prepareSources)
-    val outDir = buildDir.resolve(name)
-    val inDirs = arrayOf(builtinsSrc, builtinsNative, builtinsCherryPicked)
-    inDirs.forEach { inputs.dir(it).withPathSensitivity(RELATIVE) }
+fun serializeTask(name: String, sourcesTask: TaskProvider<*>, inDirs: List<File>) =
+    tasks.register(name, NoDebugJavaExec::class) {
+        dependsOn(sourcesTask)
+        val outDir = buildDir.resolve(this.name)
+        inDirs.forEach { inputs.dir(it).withPathSensitivity(RELATIVE) }
+        outputs.dir(outDir)
+        outputs.cacheIf { true }
 
-    outputs.dir(outDir)
-    outputs.cacheIf { true }
+        classpath(rootProject.buildscript.configurations["bootstrapCompilerClasspath"])
+        main = "org.jetbrains.kotlin.serialization.builtins.RunKt"
+        jvmArgs("-Didea.io.use.nio2=true")
+        args(
+            pathRelativeToWorkingDir(outDir),
+            *inDirs.map(::pathRelativeToWorkingDir).toTypedArray()
+        )
+    }
 
-    classpath(rootProject.buildscript.configurations["bootstrapCompilerClasspath"])
-    main = "org.jetbrains.kotlin.serialization.builtins.RunKt"
-    jvmArgs("-Didea.io.use.nio2=true")
-    args(
-        pathRelativeToWorkingDir(outDir),
-        *inDirs.map(::pathRelativeToWorkingDir).toTypedArray()
-    )
-}
+val serialize = serializeTask("serialize", prepareSources, listOf(builtinsSrc, builtinsNative, builtinsCherryPicked))
 
-val serializeJvm by tasks.registering(NoDebugJavaExec::class) {
-    dependsOn(prepareSourcesJvm)
-    val outDir = buildDir.resolve(name)
-    val inDirs = arrayOf(builtinsSrc, builtinsNative, builtinsCherryPickedJvm)
-    inDirs.forEach { inputs.dir(it).withPathSensitivity(RELATIVE) }
-
-    outputs.dir(outDir)
-    outputs.cacheIf { true }
-
-    classpath(rootProject.buildscript.configurations["bootstrapCompilerClasspath"])
-    main = "org.jetbrains.kotlin.serialization.builtins.RunKt"
-    jvmArgs("-Didea.io.use.nio2=true")
-    args(
-        pathRelativeToWorkingDir(outDir),
-        *inDirs.map(::pathRelativeToWorkingDir).toTypedArray()
-    )
-}
+val serializeJvm= serializeTask("serializeJvm", prepareSourcesJvm, listOf(builtinsSrc, builtinsNative, builtinsCherryPickedJvm))
 
 val builtinsJar by task<Jar> {
     dependsOn(serialize)
